@@ -1,0 +1,8 @@
+<resources>
+    <!-- Основные цвета интерфейса -->
+    <color name="background_color">#FFFFFF</color> <!-- Белый фон -->
+    <color name="text_color">#212121</color> <!-- Темный текст -->
+    <color name="hint_color">#888888</color> <!-- Светлый цвет для подсказок -->
+    <color name="button_color">#2196F3</color> <!-- Синий цвет кнопки -->
+    <color name="white">#FFFFFF</color> <!-- Белый цвет текста на кнопке -->
+</resources>
