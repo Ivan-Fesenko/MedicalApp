@@ -1,8 +1,9 @@
 package com.example.medicalapp.model;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class MedicalCard implements Serializable {
+public class MedicalCard implements Parcelable {
     private String patientName;
     private int age;
     private String diagnosis;
@@ -11,6 +12,36 @@ public class MedicalCard implements Serializable {
         this.patientName = patientName;
         this.age = age;
         this.diagnosis = diagnosis;
+    }
+
+    protected MedicalCard(Parcel in) {
+        patientName = in.readString();
+        age = in.readInt();
+        diagnosis = in.readString();
+    }
+
+    public static final Creator<MedicalCard> CREATOR = new Creator<MedicalCard>() {
+        @Override
+        public MedicalCard createFromParcel(Parcel in) {
+            return new MedicalCard(in);
+        }
+
+        @Override
+        public MedicalCard[] newArray(int size) {
+            return new MedicalCard[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(patientName);
+        dest.writeInt(age);
+        dest.writeString(diagnosis);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public String getPatientName() {
@@ -34,3 +65,4 @@ public class MedicalCard implements Serializable {
                 '}';
     }
 }
+
