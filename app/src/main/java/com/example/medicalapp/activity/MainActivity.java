@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Ініціалізація DataBinding
+        // Ініціалізація DataBinding KP_2_5
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
         binding.setViewModel(viewModel);
