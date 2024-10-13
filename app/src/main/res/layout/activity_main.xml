@@ -1,72 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:padding="16dp"
-    android:background="@color/background_color">
+    android:background="@android:color/white">
 
-    <!-- Поле введення імені пацієнта -->
+    <!-- Поле для введення імені пацієнта -->
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Введіть ім'я пацієнта"
-        android:textColor="@color/text_color"
-        android:textColorHint="@color/hint_color"
-        android:background="@drawable/edittext_background"
+        android:inputType="textPersonName"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/edit_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
-    <!-- Поле введення віку пацієнта -->
+    <!-- Поле для введення віку -->
     <EditText
         android:id="@+id/editTextAge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Введіть вік"
         android:inputType="number"
-        android:textColor="@color/text_color"
-        android:textColorHint="@color/hint_color"
-        android:background="@drawable/edittext_background"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/edit_text"
         app:layout_constraintTop_toBottomOf="@id/editTextName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
-    <!-- Поле введення діагнозу пацієнта -->
+    <!-- Поле для введення діагнозу -->
     <EditText
         android:id="@+id/editTextDiagnosis"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Введіть діагноз"
-        android:textColor="@color/text_color"
-        android:textColorHint="@color/hint_color"
-        android:background="@drawable/edittext_background"
+        android:inputType="text"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/edit_text"
         app:layout_constraintTop_toBottomOf="@id/editTextAge"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
-    <!-- Кнопка для надсилання даних -->
+    <!-- Кнопка для додавання запису -->
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Надіслати"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/button_color"
-        android:elevation="4dp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/purple_500"
         android:padding="12dp"
         app:layout_constraintTop_toBottomOf="@id/editTextDiagnosis"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="16dp" />
 
+    <!-- Кнопка для очищення бази даних -->
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Очистити БД"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/purple_700"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/submitButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <!-- RecyclerView для відображення списку пацієнтів -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/clearButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

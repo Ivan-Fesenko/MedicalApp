@@ -1,8 +1,6 @@
 package com.example.medicalapp;
 
-import java.io.Serializable;
-
-public class MedicalCard implements Serializable {
+public class MedicalCard {
     private String patientName; // Ім'я пацієнта (рядок)
     private int age; // Вік пацієнта (ціле число)
     private String diagnosis; // Діагноз пацієнта (рядок)

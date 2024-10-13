@@ -10,11 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
-        <!-- Оголошення DetailActivity -->
-        <activity
-            android:name=".DetailActivity"
-            android:exported="false" />
-
         <!-- Оголошення MainActivity -->
         <activity
             android:name=".MainActivity"
@@ -28,4 +23,5 @@
     </application>
 
 </manifest>
+
 
