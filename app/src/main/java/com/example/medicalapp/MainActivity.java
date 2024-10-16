@@ -7,19 +7,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medicalapp.data.room.MedicalCardEntity;
-import com.example.medicalapp.data.room.MedicalCardRepository;
 import com.example.medicalapp.recycler.MedicalCardRecyclerViewAdapter;
+import com.example.medicalapp.viewmodel.MainViewModel;
+
+import org.koin.java.KoinJavaComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private MedicalCardRepository repository;
+
+    // Ініціалізація ViewModel через Koin
+    private MainViewModel mainViewModel;
     private RecyclerView recyclerView;
     private MedicalCardRecyclerViewAdapter adapter;
     private List<MedicalCardEntity> allCards;
@@ -29,15 +34,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Ініціалізуємо репозиторій
-        repository = MedicalCardRepository.getInstance(this);
+        // Ініціалізація ViewModel через Koin без фабрики
+        mainViewModel = KoinJavaComponent.get(MainViewModel.class);
 
         // Знаходимо елементи інтерфейсу
         EditText editTextName = findViewById(R.id.editTextName);
         EditText editTextAge = findViewById(R.id.editTextAge);
         EditText editTextDiagnosis = findViewById(R.id.editTextDiagnosis);
         Button submitButton = findViewById(R.id.submitButton);
-        Button clearButton = findViewById(R.id.clearButton);  // Додаємо кнопку очистки
+        Button clearButton = findViewById(R.id.clearButton);
         recyclerView = findViewById(R.id.recyclerView);
 
         // Ініціалізація RecyclerView
@@ -64,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 int age = Integer.parseInt(ageString);
                 MedicalCardEntity medicalCard = new MedicalCardEntity(patientName, age, diagnosis);
 
-                // Додаємо пацієнта до БД
-                repository.insertMedicalCard(medicalCard);
+                // Додаємо пацієнта до БД через ViewModel
+                mainViewModel.insertMedicalCard(medicalCard);
 
                 // Оновлюємо список в реальному часі
                 allCards.add(0, medicalCard);  // Додаємо нову карту на початок списку
@@ -78,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Очищуємо базу даних
-                repository.deleteAllCards();
+                // Очищуємо базу даних через ViewModel
+                mainViewModel.deleteAllCards();
                 allCards.clear();  // Очищаємо список у адаптері
                 adapter.notifyDataSetChanged();  // Оновлюємо адаптер
                 Toast.makeText(MainActivity.this, "База даних очищена", Toast.LENGTH_SHORT).show();
@@ -87,12 +92,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Завантаження всіх карт з БД
+    // Завантаження всіх карт з БД через ViewModel
     private void loadAllCards() {
-        allCards.clear();  // Очищаємо список перед завантаженням нових карт
-        allCards.addAll(repository.getAllMedicalCards());  // Завантажуємо всі карти
-        Collections.reverse(allCards);  // Нові карти будуть зверху
-        adapter.notifyDataSetChanged();  // Оновлюємо адаптер після завантаження
+        mainViewModel.getAllMedicalCards().observe(this, cards -> {
+            allCards.clear();
+            allCards.addAll(cards);
+            Collections.reverse(allCards);  // Нові карти будуть зверху
+            adapter.notifyDataSetChanged();  // Оновлюємо адаптер після завантаження
+        });
     }
 }
-

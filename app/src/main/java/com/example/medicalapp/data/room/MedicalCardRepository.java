@@ -1,7 +1,5 @@
 package com.example.medicalapp.data.room;
 
-import android.content.Context;
-import androidx.room.Room;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,36 +8,36 @@ public class MedicalCardRepository {
     private final MedicalCardDAO medicalCardDAO;
     private final ExecutorService executorService;
 
-    private static MedicalCardRepository instance;
-
-    public static synchronized MedicalCardRepository getInstance(Context context) {
-        if (instance == null) {
-            AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "medical-database")
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build();
-            instance = new MedicalCardRepository(db.medicalCardDAO());
-        }
-        return instance;
-    }
-
-    private MedicalCardRepository(MedicalCardDAO medicalCardDAO) {
+    // Ініціалізуємо ExecutorService для фонових задач
+    public MedicalCardRepository(MedicalCardDAO medicalCardDAO) {
         this.medicalCardDAO = medicalCardDAO;
-        this.executorService = Executors.newSingleThreadExecutor();
+        this.executorService = Executors.newSingleThreadExecutor(); // Використовуємо Executor для асинхронних операцій
     }
 
+    // Функція для асинхронного додавання медичної карти
     public void insertMedicalCard(MedicalCardEntity medicalCard) {
-        executorService.execute(() -> medicalCardDAO.insert(medicalCard));
+        executorService.execute(() -> {
+            medicalCardDAO.insert(medicalCard);
+        });
     }
 
-    public List<MedicalCardEntity> getAllMedicalCards() {
-        return medicalCardDAO.getAll();
+    // Функція для асинхронного отримання всіх медичних карт
+    public void getAllMedicalCards(ResultCallback<List<MedicalCardEntity>> callback) {
+        executorService.execute(() -> {
+            List<MedicalCardEntity> result = medicalCardDAO.getAll();
+            callback.onResult(result);  // Передаємо результат через callback
+        });
     }
 
-    // Додаємо метод для видалення всіх записів
+    // Функція для асинхронного видалення всіх медичних карт
     public void deleteAllCards() {
-        executorService.execute(() -> medicalCardDAO.deleteAll());
+        executorService.execute(() -> {
+            medicalCardDAO.deleteAll();
+        });
+    }
+
+    // Інтерфейс для передачі результатів асинхронних операцій
+    public interface ResultCallback<T> {
+        void onResult(T result);
     }
 }
-

@@ -8,12 +8,16 @@ import java.util.List;
 
 @Dao
 public interface MedicalCardDAO {
+
+    // Метод отримання всіх записів
     @Query("SELECT * FROM medical_cards")
-    List<MedicalCardEntity> getAll();
+    List<MedicalCardEntity> getAll();  // Повертає всі медичні картки
 
+    // Метод для вставки нового запису
     @Insert
-    void insert(MedicalCardEntity medicalCard);
+    void insert(MedicalCardEntity medicalCard);  // Вставляє медичну картку
 
+    // Метод для видалення всіх записів
     @Query("DELETE FROM medical_cards")
-    void deleteAll();  // Очищення бази даних
+    void deleteAll();  // Очищає таблицю
 }
