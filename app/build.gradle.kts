@@ -51,4 +51,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Додані залежності для Mockito та інших інструментів
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    androidTestImplementation("org.mockito:mockito-android:5.7.0")
+    implementation("net.bytebuddy:byte-buddy:1.14.9")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    testImplementation ("junit:junit:4.13.2")
+
 }
+

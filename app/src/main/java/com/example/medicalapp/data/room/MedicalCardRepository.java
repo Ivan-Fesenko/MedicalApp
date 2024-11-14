@@ -14,25 +14,40 @@ public class MedicalCardRepository {
         this.executorService = Executors.newSingleThreadExecutor(); // Використовуємо Executor для асинхронних операцій
     }
 
-    // Функція для асинхронного додавання медичної карти
-    public void insertMedicalCard(MedicalCardEntity medicalCard) {
+    // Функція для асинхронного додавання медичної карти з зворотним викликом
+    public void insertMedicalCard(MedicalCardEntity medicalCard, TaskCallback<Boolean> callback) {
         executorService.execute(() -> {
-            medicalCardDAO.insert(medicalCard);
+            try {
+                medicalCardDAO.insert(medicalCard);
+                callback.onSuccess(true); // Виклик при успішному виконанні
+            } catch (Exception e) {
+                callback.onFailure(e); // Виклик при виникненні помилки
+            }
         });
     }
 
-    // Функція для асинхронного отримання всіх медичних карт
+    // Функція для асинхронного отримання всіх медичних карт з обробкою помилок
     public void getAllMedicalCards(ResultCallback<List<MedicalCardEntity>> callback) {
         executorService.execute(() -> {
-            List<MedicalCardEntity> result = medicalCardDAO.getAll();
-            callback.onResult(result);  // Передаємо результат через callback
+            try {
+                List<MedicalCardEntity> result = medicalCardDAO.getAll();
+                callback.onResult(result);  // Передаємо результат через callback
+            } catch (Exception e) {
+                e.printStackTrace();
+                callback.onResult(null); // У разі помилки повертаємо null
+            }
         });
     }
 
-    // Функція для асинхронного видалення всіх медичних карт
-    public void deleteAllCards() {
+    // Функція для асинхронного видалення всіх медичних карт з зворотним викликом
+    public void deleteAllCards(TaskCallback<Boolean> callback) {
         executorService.execute(() -> {
-            medicalCardDAO.deleteAll();
+            try {
+                medicalCardDAO.deleteAll();
+                callback.onSuccess(true); // Виклик при успішному видаленні
+            } catch (Exception e) {
+                callback.onFailure(e); // Виклик при виникненні помилки
+            }
         });
     }
 
@@ -40,4 +55,11 @@ public class MedicalCardRepository {
     public interface ResultCallback<T> {
         void onResult(T result);
     }
+
+    // Інтерфейс для зворотного виклику успішності виконання операції
+    public interface TaskCallback<T> {
+        void onSuccess(T result);
+        void onFailure(Exception e);
+    }
 }
+
